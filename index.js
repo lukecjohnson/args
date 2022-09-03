@@ -1,41 +1,32 @@
-function assert(expr, msg) {
-  if (!expr) {
-    throw new Error(msg);
-  }
-}
-
 export default function parse(
   flags,
   { argv = process.argv.slice(2), stopEarly = false } = {},
 ) {
-  const result = {
-    args: [],
-    flags: {},
-  };
-
-  const shorthandFlags = {};
+  const result = { args: [], flags: {} };
+  const shorthandMap = {};
 
   for (const key in flags) {
     const { defaultValue, shorthand, type } = flags[key];
 
-    assert(
-      type === 'boolean' || type === 'number' || type === 'string',
-      `type for "${key}" flag must be "boolean", "number", or "string`,
-    );
+    if (type !== 'boolean' && type !== 'number' && type !== 'string') {
+      throw new Error(
+        `type for "${key}" flag must be "boolean", "number", or "string`,
+      );
+    }
 
     if (shorthand) {
-      assert(
-        shorthand.length === 1,
-        `shorthand for "${key}" flag must be 1 character`,
-      );
-      shorthandFlags[shorthand] = key;
+      if (shorthand.length !== 1) {
+        throw new Error(`shorthand for "${key}" flag must be 1 character`);
+      }
+      shorthandMap[shorthand] = key;
     }
 
     if (defaultValue) {
-      assert(
-        typeof defaultValue === type,
-        `default value for "${key}" flag must be of type "${type}"`,
-      );
+      if (typeof defaultValue !== type) {
+        throw new Error(
+          `default value for "${key}" flag must be of type "${type}"`,
+        );
+      }
       result.flags[key] = defaultValue;
     }
   }
@@ -45,10 +36,12 @@ export default function parse(
 
     if (arg[0] !== '-') {
       result.args.push(arg);
+
       if (stopEarly) {
         result.args.push(...argv.slice(i + 1));
         break;
       }
+
       continue;
     }
 
@@ -62,8 +55,8 @@ export default function parse(
       beginName = 2;
     }
 
-    const beginValue = arg.indexOf('=');
     let name, value;
+    const beginValue = arg.indexOf('=');
 
     if (beginValue > -1) {
       name = arg.substring(beginName, beginValue);
@@ -74,31 +67,34 @@ export default function parse(
 
     if (beginName === 1) {
       if (name.length === 1) {
-        name = shorthandFlags[name];
+        name = shorthandMap[name];
       } else {
         for (let j = 1; j < arg.length; j++) {
           const shorthand = arg[j];
-          assert(shorthandFlags[shorthand], `unknown flag: "${arg[j]}"`);
-          assert(
-            flags[shorthandFlags[shorthand]].type === 'boolean',
-            'only flags of type "boolean" can be stacked',
-          );
-          result.flags[shorthandFlags[shorthand]] = true;
+
+          if (!shorthandMap[shorthand]) {
+            throw new Error(`unknown flag: "${arg[j]}"`);
+          }
+
+          if (flags[shorthandMap[shorthand]].type !== 'boolean') {
+            throw new Error('only flags of type "boolean" can be stacked');
+          }
+
+          result.flags[shorthandMap[shorthand]] = true;
         }
         continue;
       }
     }
 
-    assert(flags[name], `unknown flag: "${name}"`);
+    if (!flags[name]) {
+      throw new Error(`unknown flag: "${name}"`);
+    }
 
-    const { type } = flags[name];
-
-    if (type === 'boolean') {
+    if (flags[name].type === 'boolean') {
       if (value) {
-        assert(
-          value === 'true' || value === 'false',
-          `"${name}" flag requires a value of type "boolean"`,
-        );
+        if (value !== 'true' && value !== 'false') {
+          throw new Error(`"${name}" flag requires a value of type "boolean"`);
+        }
         result.flags[name] = value === 'true';
       } else {
         result.flags[name] = true;
@@ -108,16 +104,19 @@ export default function parse(
 
     if (!value) {
       value = argv[i + 1];
-      assert(
-        value && (value[0] !== '-' || type === 'number'),
-        `"${name}" flag requires a value of type "${type}"`,
-      );
       i++;
+      if (!value || (value[0] === '-' && flags[name].type !== 'number')) {
+        throw new Error(
+          `"${name}" flag requires a value of type "${flags[name].type}"`,
+        );
+      }
     }
 
-    if (type === 'number') {
+    if (flags[name].type === 'number') {
       value = +value;
-      assert(!isNaN(value), `"${name}" flag requires a value of type "number"`);
+      if (isNaN(value)) {
+        throw new Error(`"${name}" flag requires a value of type "number"`);
+      }
     }
 
     result.flags[name] = value;
