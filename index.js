@@ -45,42 +45,43 @@ export default function parse(
       continue;
     }
 
-    let beginName = 1;
+    let nameStartIndex = 1;
 
     if (arg[1] === '-') {
       if (arg.length === 2) {
         result.args.push(...argv.slice(i + 1));
         break;
       }
-      beginName = 2;
+      nameStartIndex = 2;
     }
 
     let name, value;
-    const beginValue = arg.indexOf('=');
+    const valueStartIndex = arg.indexOf('=');
 
-    if (beginValue > -1) {
-      name = arg.substring(beginName, beginValue);
-      value = arg.substring(beginValue + 1);
+    if (valueStartIndex > -1) {
+      name = arg.substring(nameStartIndex, valueStartIndex);
+      value = arg.substring(valueStartIndex + 1);
     } else {
-      name = arg.substring(beginName);
+      name = arg.substring(nameStartIndex);
     }
 
-    if (beginName === 1) {
+    if (nameStartIndex === 1) {
       if (name.length === 1) {
         name = shorthandMap[name];
       } else {
         for (let j = 1; j < arg.length; j++) {
           const shorthand = arg[j];
+          const mappedFlagName = shorthandMap[shorthand];
 
-          if (!shorthandMap[shorthand]) {
-            throw new Error(`unknown flag: "${arg[j]}"`);
+          if (!mappedFlagName) {
+            throw new Error(`unknown flag: "${shorthand}"`);
           }
 
-          if (flags[shorthandMap[shorthand]].type !== 'boolean') {
+          if (flags[mappedFlagName].type !== 'boolean') {
             throw new Error('only flags of type "boolean" can be stacked');
           }
 
-          result.flags[shorthandMap[shorthand]] = true;
+          result.flags[mappedFlagName] = true;
         }
         continue;
       }

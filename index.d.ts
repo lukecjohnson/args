@@ -1,45 +1,45 @@
-export interface BaseFlag {
+export interface Flag {
   shorthand?: string;
 }
 
-export interface BooleanFlag extends BaseFlag {
+export interface BooleanFlag extends Flag {
   type: 'boolean';
   defaultValue?: boolean;
 }
 
-export interface StringFlag extends BaseFlag {
-  type: 'string';
-  defaultValue?: string;
-}
-
-export interface NumberFlag extends BaseFlag {
+export interface NumberFlag extends Flag {
   type: 'number';
   defaultValue?: number;
 }
 
-export interface Flags {
-  [key: string]: BooleanFlag | StringFlag | NumberFlag;
+export interface StringFlag extends Flag {
+  type: 'string';
+  defaultValue?: string;
 }
 
-export interface Options {
+export interface Flags {
+  [key: string]: BooleanFlag | NumberFlag | StringFlag;
+}
+
+export interface ParseOptions {
   argv?: string[];
   stopEarly?: boolean;
 }
 
-export interface Result<T extends Flags> {
+export interface ParseResult<T extends Flags> {
   args: string[];
   flags: {
     [K in keyof T]?: T[K] extends BooleanFlag
       ? boolean
-      : T[K] extends StringFlag
-      ? string
       : T[K] extends NumberFlag
       ? number
+      : T[K] extends StringFlag
+      ? string
       : never;
   };
 }
 
 export default function parse<T extends Flags>(
   flags: T,
-  options: Options
-): Result<T>;
+  options: ParseOptions,
+): ParseResult<T>;
