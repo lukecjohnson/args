@@ -4,17 +4,17 @@ export interface Flag {
 
 export interface BooleanFlag extends Flag {
   type: 'boolean';
-  defaultValue?: boolean;
+  default?: boolean;
 }
 
 export interface NumberFlag extends Flag {
   type: 'number';
-  defaultValue?: number;
+  default?: number;
 }
 
 export interface StringFlag extends Flag {
   type: 'string';
-  defaultValue?: string;
+  default?: string;
 }
 
 export interface Flags {

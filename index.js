@@ -6,7 +6,7 @@ export default function parse(
   const shorthandMap = {};
 
   for (const key in flags) {
-    const { defaultValue, shorthand, type } = flags[key];
+    const { default: defaultValue, shorthand, type } = flags[key];
 
     if (type !== 'boolean' && type !== 'number' && type !== 'string') {
       throw new Error(
