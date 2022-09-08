@@ -39,7 +39,7 @@ export interface ParseResult<T extends Flags> {
   };
 }
 
-export default function parse<T extends Flags>(
+export function parse<T extends Flags>(
   flags: T,
   options: ParseOptions,
 ): ParseResult<T>;

@@ -1,4 +1,4 @@
-export default function parse(
+export function parse(
   flags,
   { argv = process.argv.slice(2), stopEarly = false } = {},
 ) {
