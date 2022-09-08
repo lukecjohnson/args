@@ -3,7 +3,7 @@ import arg from 'arg';
 import minimist from 'minimist';
 import mri from 'mri';
 import yargs from 'yargs-parser';
-import parse from '../index.js';
+import { parse } from '../index.js';
 
 const argv = ['public', '--host', '0.0.0.0', '--port=8080', '-d'];
 
