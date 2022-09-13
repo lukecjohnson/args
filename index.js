@@ -21,7 +21,7 @@ export function parse(
       shorthandMap[shorthand] = key;
     }
 
-    if (defaultValue) {
+    if (defaultValue !== undefined) {
       if (typeof defaultValue !== type) {
         throw new Error(
           `default value for "${key}" flag must be of type "${type}"`,
