@@ -1,12 +1,24 @@
 {
   "name": "@lukecjohnson/flags",
   "version": "0.0.0",
+  "description": "A quick, lightweight command-line argument and flag parser",
   "repository": "lukecjohnson/flags",
+  "license": "MIT",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
   "files": [
     "index.js",
     "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=12.20"
+  },
+  "keywords": [
+    "cli",
+    "parser",
+    "argv",
+    "args",
+    "flags"
   ]
 }
