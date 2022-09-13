@@ -1,13 +1,15 @@
 # @lukecjohnson/flags
 
-A quick, lightweight command-line argument and flag parser with basic type
-checking, shorthand flags, and default values.
+A quick, lightweight command-line argument and flag parser with type checking,
+shorthand flags, and default values
 
 ## Installation
 
 ```
 npm install @lukecjohnson/flags
 ```
+
+*Note: `@lukecjohnson/flags` is an ESM-only package*
 
 ## Usage
 
@@ -21,8 +23,8 @@ object describing the flag with the following properties:
 - Optional:
   - `default`: The default value assigned to the flag if no value is provided by
     the end-user
-  - `shorthand`: A single-letter alias that can be used with a single dash on the
-    command line (e.g. `-p` instead of `--port`)
+  - `shorthand`: A single-letter alias that can be used with a single dash on
+    the command line (e.g. `-p` instead of `--port`)
 
 `parse` returns an object containing `args` and `flags`:
 
@@ -75,18 +77,18 @@ console.log({ args, flags });
 `parse` can accept an object as an optional second argument to customize its
 behavior. The following options are available:
 
-- `argv`: Raw arguments that should be parsed (Default: `process.argv.slice(2)`)
-- `stopEarly`: Whether `result.args` should be populated with every argument
-  after the first non-flag argument (Default: `false`)
+- `argv`: An array of raw arguments to be parsed (Default: `process.argv.slice(2)`)
+- `stopEarly`: When `true`, all arguments after the first non-flag argument are
+  pushed to `result.args` (Default: `false`)
 
 ## Benchmarks
 
 ```
-yargs-parser            24,777 ops/sec ±0.81% (94 runs sampled)
-minimist                211,443 ops/sec ±0.56% (95 runs sampled)
-mri                     477,898 ops/sec ±1.09% (94 runs sampled)
-arg                     996,026 ops/sec ±0.75% (93 runs sampled)
-@lukecjohnson/flags     2,109,096 ops/sec ±0.44% (92 runs sampled)
+yargs-parser          27,173 ops/sec ±0.99% (89 runs sampled)
+minimist              233,989 ops/sec ±3.20% (94 runs sampled)
+mri                   550,229 ops/sec ±1.01% (92 runs sampled)
+arg                   1,111,470 ops/sec ±0.60% (93 runs sampled)
+@lukecjohnson/flags   2,355,067 ops/sec ±0.52% (96 runs sampled)
 ```
 
 See [`/benchmark`](benchmark) for benchmark details
