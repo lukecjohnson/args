@@ -25,6 +25,9 @@ object describing the flag with the following properties:
     the end-user
   - `shorthand`: A single-letter alias that can be used with a single dash on
     the command line (e.g. `-p` instead of `--port`)
+  - `description`: A short description of the flag to be included in the
+    generated help text that is printed when the built-in `--help` or `-h` flag
+    is provided
 
 `parse` returns an object containing `args` and `flags`:
 
@@ -78,6 +81,11 @@ console.log({ args, flags });
 behavior. The following options are available:
 
 - `argv`: An array of raw arguments to be parsed (Default: `process.argv.slice(2)`)
+- `usage`: The general usage pattern of the program or command to be included
+  in the generated help text that is printed when the built-in `--help` or `-h`
+  flag is provided (Example: `'node serve.js [directory] [flags]'`)
+- `disableHelp`: When `true`, the built-in `--help` and `-h` flags are
+  disabled (Default: `false`)
 - `stopEarly`: When `true`, all arguments after the first non-flag argument are
   pushed to `result.args` (Default: `false`)
 
