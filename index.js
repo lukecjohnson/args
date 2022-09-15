@@ -1,34 +1,55 @@
 export function parse(
   flags,
-  { argv = process.argv.slice(2), stopEarly = false } = {},
+  {
+    argv = process.argv.slice(2),
+    disableHelp = false,
+    stopEarly = false,
+    usage,
+  } = {},
 ) {
   const result = { args: [], flags: {} };
   const shorthandMap = {};
 
   for (const key in flags) {
-    const { default: defaultValue, shorthand, type } = flags[key];
+    const flag = flags[key];
 
-    if (type !== 'boolean' && type !== 'number' && type !== 'string') {
+    if (!disableHelp && (key === 'help' || flag.shorthand === 'h')) {
+      throw new Error(
+        '"--help" and "-h" are built-in flags - set the `disableHelp` option ' +
+          'to disable them',
+      );
+    }
+
+    if (
+      flag.type !== 'boolean' &&
+      flag.type !== 'number' &&
+      flag.type !== 'string'
+    ) {
       throw new Error(
         `type for "${key}" flag must be "boolean", "number", or "string`,
       );
     }
 
-    if (shorthand) {
-      if (shorthand.length !== 1) {
+    if (flag.shorthand) {
+      if (flag.shorthand.length !== 1) {
         throw new Error(`shorthand for "${key}" flag must be 1 character`);
       }
-      shorthandMap[shorthand] = key;
+      shorthandMap[flag.shorthand] = key;
     }
 
-    if (defaultValue !== undefined) {
-      if (typeof defaultValue !== type) {
+    if (flag.default !== undefined) {
+      if (typeof flag.default !== flag.type) {
         throw new Error(
-          `default value for "${key}" flag must be of type "${type}"`,
+          `default value for "${key}" flag must be of type "${flag.type}"`,
         );
       }
-      result.flags[key] = defaultValue;
+      result.flags[key] = flag.default;
     }
+  }
+
+  if (!disableHelp) {
+    flags.help = { type: 'boolean' };
+    shorthandMap.h = 'help';
   }
 
   for (let i = 0; i < argv.length; i++) {
@@ -105,12 +126,12 @@ export function parse(
 
     if (!value) {
       value = argv[i + 1];
-      i++;
       if (!value || (value[0] === '-' && flags[name].type !== 'number')) {
         throw new Error(
           `"${name}" flag requires a value of type "${flags[name].type}"`,
         );
       }
+      i++;
     }
 
     if (flags[name].type === 'number') {
@@ -121,6 +142,43 @@ export function parse(
     }
 
     result.flags[name] = value;
+  }
+
+  if (!disableHelp && result.flags.help) {
+    let output = '\n';
+
+    if (usage) {
+      output += `Usage:\n  ${usage}\n\n`;
+    }
+
+    output += 'Flags:\n';
+
+    for (const key in flags) {
+      const flag = flags[key];
+
+      if (!flag.description) {
+        continue;
+      }
+
+      output += '  ';
+
+      if (flag.shorthand) {
+        output += `-${flag.shorthand}, `;
+      }
+
+      output += `--${key}\t\t${flag.description}`;
+
+      if (flag.default !== undefined) {
+        output += ` (Default: ${
+          flag.type === 'string' ? `"${flag.default}"` : flag.default
+        })`;
+      }
+
+      output += '\n';
+    }
+
+    console.log(output);
+    process.exit();
   }
 
   return result;

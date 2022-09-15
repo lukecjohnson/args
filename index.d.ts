@@ -1,4 +1,5 @@
 export interface Flag {
+  description?: string;
   shorthand?: string;
 }
 
@@ -23,7 +24,9 @@ export interface Flags {
 
 export interface ParseOptions {
   argv?: string[];
+  disableHelp?: boolean;
   stopEarly?: boolean;
+  usage?: string;
 }
 
 export interface ParseResult<T extends Flags> {
