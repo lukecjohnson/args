@@ -34,6 +34,7 @@ export function parse(
       if (flag.shorthand.length !== 1) {
         throw new Error(`shorthand for "${key}" flag must be 1 character`);
       }
+
       shorthandMap[flag.shorthand] = key;
     }
 
@@ -43,6 +44,7 @@ export function parse(
           `default value for "${key}" flag must be of type "${flag.type}"`,
         );
       }
+
       result.flags[key] = flag.default;
     }
   }
@@ -56,13 +58,12 @@ export function parse(
     const arg = argv[i];
 
     if (arg[0] !== '-') {
-      result.args.push(arg);
-
       if (stopAtPositional) {
-        result.args.push(...argv.slice(i + 1));
+        result.args.push(...argv.slice(i));
         break;
       }
 
+      result.args.push(arg);
       continue;
     }
 
@@ -73,6 +74,7 @@ export function parse(
         result.args.push(...argv.slice(i + 1));
         break;
       }
+
       nameStartIndex = 2;
     }
 
@@ -88,14 +90,20 @@ export function parse(
 
     if (nameStartIndex === 1) {
       if (name.length === 1) {
-        name = shorthandMap[name];
+        const mappedFlagName = shorthandMap[name];
+
+        if (!mappedFlagName) {
+          throw new Error(`unknown flag: -${name}`);
+        }
+
+        name = mappedFlagName;
       } else {
         for (let j = 1; j < arg.length; j++) {
           const shorthand = arg[j];
           const mappedFlagName = shorthandMap[shorthand];
 
           if (!mappedFlagName) {
-            throw new Error(`unknown flag: "${shorthand}"`);
+            throw new Error(`unknown flag: -${shorthand}`);
           }
 
           if (flags[mappedFlagName].type !== 'boolean') {
@@ -104,38 +112,44 @@ export function parse(
 
           result.flags[mappedFlagName] = true;
         }
+
         continue;
       }
     }
 
     if (!flags[name]) {
-      throw new Error(`unknown flag: "${name}"`);
+      throw new Error(`unknown flag: --${name}`);
     }
 
     if (flags[name].type === 'boolean') {
-      if (value) {
-        if (value !== 'true' && value !== 'false') {
-          throw new Error(`"${name}" flag requires a value of type "boolean"`);
-        }
-        result.flags[name] = value === 'true';
-      } else {
+      if (!value) {
         result.flags[name] = true;
+        continue;
       }
+
+      if (value !== 'true' && value !== 'false') {
+        throw new Error(`"${name}" flag requires a value of type "boolean"`);
+      }
+
+      result.flags[name] = value === 'true';
       continue;
     }
 
     if (!value) {
       value = argv[i + 1];
+
       if (!value || (value[0] === '-' && flags[name].type !== 'number')) {
         throw new Error(
           `"${name}" flag requires a value of type "${flags[name].type}"`,
         );
       }
+
       i++;
     }
 
     if (flags[name].type === 'number') {
       value = +value;
+
       if (isNaN(value)) {
         throw new Error(`"${name}" flag requires a value of type "number"`);
       }
