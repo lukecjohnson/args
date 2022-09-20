@@ -25,7 +25,7 @@ export interface Flags {
 export interface ParseOptions {
   argv?: string[];
   disableHelp?: boolean;
-  stopEarly?: boolean;
+  stopAtPositional?: boolean;
   usage?: string;
 }
 

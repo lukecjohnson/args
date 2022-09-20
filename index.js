@@ -3,7 +3,7 @@ export function parse(
   {
     argv = process.argv.slice(2),
     disableHelp = false,
-    stopEarly = false,
+    stopAtPositional = false,
     usage,
   } = {},
 ) {
@@ -58,7 +58,7 @@ export function parse(
     if (arg[0] !== '-') {
       result.args.push(arg);
 
-      if (stopEarly) {
+      if (stopAtPositional) {
         result.args.push(...argv.slice(i + 1));
         break;
       }

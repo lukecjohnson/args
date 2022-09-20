@@ -37,8 +37,8 @@ behavior. The following options are available:
   in the generated help text
 - `disableHelp`: When `true`, the built-in `--help` and `-h` flags are
   disabled (Default: `false`)
-- `stopEarly`: When `true`, all arguments after the first non-flag argument are
-  pushed to `result.args` (Default: `false`)
+- `stopAtPositional`: When `true`, all arguments after the first positional,
+  non-flag argument are pushed to `result.args` (Default: `false`)
 
 ### Result
 
