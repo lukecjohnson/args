@@ -15,7 +15,7 @@ export function parse(
 
     if (!disableHelp && (key === 'help' || flag.shorthand === 'h')) {
       throw new Error(
-        '"--help" and "-h" are built-in flags - set the `disableHelp` option ' +
+        '--help and -h are built-in flags; set the `disableHelp` option ' +
           'to disable them',
       );
     }
@@ -128,7 +128,7 @@ export function parse(
       }
 
       if (value !== 'true' && value !== 'false') {
-        throw new Error(`"${name}" flag requires a value of type "boolean"`);
+        throw new Error(`--${name} requires a value of type \`boolean\``);
       }
 
       result.flags[name] = value === 'true';
@@ -140,7 +140,7 @@ export function parse(
 
       if (!value || (value[0] === '-' && flags[name].type !== 'number')) {
         throw new Error(
-          `"${name}" flag requires a value of type "${flags[name].type}"`,
+          `--${name} requires a value of type \`${flags[name].type}\``,
         );
       }
 
@@ -151,7 +151,7 @@ export function parse(
       value = +value;
 
       if (isNaN(value)) {
-        throw new Error(`"${name}" flag requires a value of type "number"`);
+        throw new Error(`--${name} requires a value of type \`number\``);
       }
     }
 
