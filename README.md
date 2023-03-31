@@ -112,7 +112,7 @@ Flags:
 ## Benchmarks
 
 ```
-@lukecjohnson/args   2,227,270 ops/sec ±0.70% (94 runs sampled)
+@lukecjohnson/args    2,227,270 ops/sec ±0.70% (94 runs sampled)
 arg                   1,067,095 ops/sec ±1.24% (92 runs sampled)
 mri                     520,460 ops/sec ±0.39% (95 runs sampled)
 minimist                216,378 ops/sec ±0.39% (97 runs sampled)
