@@ -131,7 +131,8 @@ export default function parse({
 
       if (!value || (value[0] === '-' && flags[name].type !== 'number')) {
         throw new Error(
-          `--${name} requires a value of type \`${flags[name].type}\``
+          (nameStartIndex === 1 ? `-${flags[name].shorthand}` : `--${name}`) +
+            ` requires a value of type \`${flags[name].type}\``
         );
       }
 
