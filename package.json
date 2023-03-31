@@ -1,6 +1,6 @@
 {
   "name": "@lukecjohnson/args",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A quick, lightweight command-line argument parser with type checking, shorthand flags, default values, and help text generation",
   "repository": "lukecjohnson/args",
   "license": "MIT",
