@@ -39,4 +39,6 @@ export interface ParseResult<T extends ParseOptions> {
   };
 }
 
-export function parse<T extends ParseOptions>(options: T): ParseResult<T>;
+export default function parse<T extends ParseOptions>(
+  options: T
+): ParseResult<T>;
