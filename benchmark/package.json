@@ -1,11 +1,11 @@
 {
-  "name": "@lukecjohnson/flags-benchmark",
+  "private": true,
   "type": "module",
-  "main": "benchmark.js",
   "dependencies": {
     "arg": "^5.0.2",
     "benchmark": "^2.1.4",
-    "minimist": "^1.2.6",
+    "command-line-args": "^5.2.1",
+    "minimist": "^1.2.8",
     "mri": "^1.2.0",
     "yargs-parser": "^21.1.1"
   }

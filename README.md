@@ -112,11 +112,12 @@ Flags:
 ## Benchmarks
 
 ```
-yargs-parser          24,706 ops/sec ±0.62% (92 runs sampled)
-minimist              209,497 ops/sec ±0.54% (92 runs sampled)
-mri                   505,183 ops/sec ±0.34% (91 runs sampled)
-arg                   1,020,208 ops/sec ±0.75% (93 runs sampled)
-@lukecjohnson/flags   2,085,279 ops/sec ±0.40% (94 runs sampled)
+@lukecjohnson/flags   2,227,270 ops/sec ±0.70% (94 runs sampled)
+arg                   1,067,095 ops/sec ±1.24% (92 runs sampled)
+mri                     520,460 ops/sec ±0.39% (95 runs sampled)
+minimist                216,378 ops/sec ±0.39% (97 runs sampled)
+command-line-args        61,050 ops/sec ±0.85% (93 runs sampled)
+yargs-parser             24,684 ops/sec ±2.47% (93 runs sampled)
 ```
 
 See [`/benchmark`](benchmark) for benchmark details
