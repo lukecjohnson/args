@@ -37,7 +37,7 @@ export default function parse({
     if (flag.default !== undefined) {
       if (typeof flag.default !== flag.type) {
         throw new Error(
-          `default value for "${key}" flag must be of type "${flag.type}"`
+          `default value for "${key}" flag must be of type \`${flag.type}\``
         );
       }
       result.flags[key] = flag.default;
@@ -97,7 +97,9 @@ export default function parse({
           }
 
           if (flags[mappedFlagName].type !== 'boolean') {
-            throw new Error('only flags of type "boolean" can be stacked');
+            throw new Error(
+              `-${shorthand} requires a value of type \`${flags[mappedFlagName].type}\``
+            );
           }
 
           result.flags[mappedFlagName] = true;
