@@ -18,31 +18,25 @@ export interface StringFlag extends Flag {
   default?: string;
 }
 
-export interface Flags {
-  [key: string]: BooleanFlag | NumberFlag | StringFlag;
-}
-
 export interface ParseOptions {
-  argv?: string[];
+  args?: string[];
+  flags?: Record<string, BooleanFlag | NumberFlag | StringFlag>;
   disableHelp?: boolean;
   stopAtPositional?: boolean;
   usage?: string;
 }
 
-export interface ParseResult<T extends Flags> {
+export interface ParseResult<T extends ParseOptions> {
   args: string[];
   flags: {
-    [K in keyof T]?: T[K] extends BooleanFlag
+    [K in keyof T['flags']]?: T['flags'][K] extends BooleanFlag
       ? boolean
-      : T[K] extends NumberFlag
+      : T['flags'][K] extends NumberFlag
       ? number
-      : T[K] extends StringFlag
+      : T['flags'][K] extends StringFlag
       ? string
       : never;
   };
 }
 
-export function parse<T extends Flags>(
-  flags: T,
-  options: ParseOptions,
-): ParseResult<T>;
+export function parse<T extends ParseOptions>(options: T): ParseResult<T>;

@@ -1,12 +1,10 @@
-export function parse(
-  flags,
-  {
-    argv = process.argv.slice(2),
-    disableHelp = false,
-    stopAtPositional = false,
-    usage,
-  } = {},
-) {
+export default function parse({
+  args = process.argv.slice(2),
+  flags = {},
+  disableHelp = false,
+  stopAtPositional = false,
+  usage
+} = {}) {
   const result = { args: [], flags: {} };
   const shorthandMap = {};
 
@@ -15,8 +13,7 @@ export function parse(
 
     if (!disableHelp && (key === 'help' || flag.shorthand === 'h')) {
       throw new Error(
-        '--help and -h are built-in flags; set the `disableHelp` option ' +
-          'to disable them',
+        '--help and -h are built-in flags; set the `disableHelp` option to disable them'
       );
     }
 
@@ -26,7 +23,7 @@ export function parse(
       flag.type !== 'string'
     ) {
       throw new Error(
-        `type for "${key}" flag must be "boolean", "number", or "string`,
+        `type for "${key}" flag must be "boolean", "number", or "string`
       );
     }
 
@@ -34,17 +31,15 @@ export function parse(
       if (flag.shorthand.length !== 1) {
         throw new Error(`shorthand for "${key}" flag must be 1 character`);
       }
-
       shorthandMap[flag.shorthand] = key;
     }
 
     if (flag.default !== undefined) {
       if (typeof flag.default !== flag.type) {
         throw new Error(
-          `default value for "${key}" flag must be of type "${flag.type}"`,
+          `default value for "${key}" flag must be of type "${flag.type}"`
         );
       }
-
       result.flags[key] = flag.default;
     }
   }
@@ -54,15 +49,14 @@ export function parse(
     shorthandMap.h = 'help';
   }
 
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i];
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
 
     if (arg[0] !== '-') {
       if (stopAtPositional) {
-        result.args.push(...argv.slice(i));
+        result.args.push(...args.slice(i));
         break;
       }
-
       result.args.push(arg);
       continue;
     }
@@ -71,10 +65,9 @@ export function parse(
 
     if (arg[1] === '-') {
       if (arg.length === 2) {
-        result.args.push(...argv.slice(i + 1));
+        result.args.push(...args.slice(i + 1));
         break;
       }
-
       nameStartIndex = 2;
     }
 
@@ -90,13 +83,10 @@ export function parse(
 
     if (nameStartIndex === 1) {
       if (name.length === 1) {
-        const mappedFlagName = shorthandMap[name];
-
-        if (!mappedFlagName) {
+        if (!shorthandMap[name]) {
           throw new Error(`unknown flag: -${name}`);
         }
-
-        name = mappedFlagName;
+        name = shorthandMap[name];
       } else {
         for (let j = 1; j < arg.length; j++) {
           const shorthand = arg[j];
@@ -112,7 +102,6 @@ export function parse(
 
           result.flags[mappedFlagName] = true;
         }
-
         continue;
       }
     }
@@ -136,11 +125,11 @@ export function parse(
     }
 
     if (!value) {
-      value = argv[i + 1];
+      value = args[i + 1];
 
       if (!value || (value[0] === '-' && flags[name].type !== 'number')) {
         throw new Error(
-          `--${name} requires a value of type \`${flags[name].type}\``,
+          `--${name} requires a value of type \`${flags[name].type}\``
         );
       }
 
