@@ -1,5 +1,5 @@
 export default function parse({
-  args = process.argv.slice(2),
+  argv = process.argv.slice(2),
   flags = {},
   disableHelp = false,
   stopAtPositional = false,
@@ -49,12 +49,12 @@ export default function parse({
     shorthandMap.h = 'help';
   }
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
 
     if (arg[0] !== '-') {
       if (stopAtPositional) {
-        result.args.push(...args.slice(i));
+        result.args.push(...argv.slice(i));
         break;
       }
       result.args.push(arg);
@@ -65,7 +65,7 @@ export default function parse({
 
     if (arg[1] === '-') {
       if (arg.length === 2) {
-        result.args.push(...args.slice(i + 1));
+        result.args.push(...argv.slice(i + 1));
         break;
       }
       nameStartIndex = 2;
@@ -127,7 +127,7 @@ export default function parse({
     }
 
     if (!value) {
-      value = args[i + 1];
+      value = argv[i + 1];
 
       if (!value || (value[0] === '-' && flags[name].type !== 'number')) {
         throw new Error(

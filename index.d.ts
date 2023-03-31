@@ -19,7 +19,7 @@ export interface StringFlag extends Flag {
 }
 
 export interface ParseOptions {
-  args?: string[];
+  argv?: string[];
   flags?: Record<string, BooleanFlag | NumberFlag | StringFlag>;
   disableHelp?: boolean;
   stopAtPositional?: boolean;

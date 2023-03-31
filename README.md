@@ -32,7 +32,7 @@ customize its behavior. The following options are available:
     the command line
   - `description`: A short description of the flag to be included in the
     generated help text
-- `args`: An array of raw arguments to be parsed (Default: `process.argv.slice(2)`)
+- `argv`: An array of raw arguments to be parsed (Default: `process.argv.slice(2)`)
 - `usage`: The general usage pattern of the program or command to be included
   in the generated help text
 - `disableHelp`: When `true`, the built-in `--help` and `-h` flags are
