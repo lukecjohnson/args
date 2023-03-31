@@ -41,7 +41,7 @@ new benchmark.Suite()
   .add('yargs-parser', () => {
     yargs(args, { alias: { H: 'host', d: 'debug', p: 'port' } });
   })
-  .add('@lukecjohnson/flags', () => {
+  .add('@lukecjohnson/args', () => {
     parse({
       args,
       flags: {

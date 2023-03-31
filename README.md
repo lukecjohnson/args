@@ -1,16 +1,16 @@
-# @lukecjohnson/flags
+# @lukecjohnson/args
 
-A quick, lightweight command-line argument with type checking,
-shorthand flags, default values, and help text generation.
+A quick, lightweight command-line argument parser with type checking, 
+shorthand flags, default values, and help text generation
 
 
 ## Installation
 
 ```
-npm install @lukecjohnson/flags
+npm install @lukecjohnson/args
 ```
 
-*Note: `@lukecjohnson/flags` is an ESM-only package*
+*Note: `@lukecjohnson/args` is an ESM-only package*
 
 
 ## Usage
@@ -53,7 +53,7 @@ customize its behavior. The following options are available:
 ### Example
 
 ```js
-import parse from '@lukecjohnson/flags';
+import parse from '@lukecjohnson/args';
 
 const { args, flags } = parse({
   flags: {
@@ -112,7 +112,7 @@ Flags:
 ## Benchmarks
 
 ```
-@lukecjohnson/flags   2,227,270 ops/sec ±0.70% (94 runs sampled)
+@lukecjohnson/args   2,227,270 ops/sec ±0.70% (94 runs sampled)
 arg                   1,067,095 ops/sec ±1.24% (92 runs sampled)
 mri                     520,460 ops/sec ±0.39% (95 runs sampled)
 minimist                216,378 ops/sec ±0.39% (97 runs sampled)
